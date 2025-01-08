@@ -1,0 +1,79 @@
+[1mdiff --git a/src/Http/ClienteHttp.java b/src/Http/ClientHttp.java[m
+[1msimilarity index 74%[m
+[1mrename from src/Http/ClienteHttp.java[m
+[1mrename to src/Http/ClientHttp.java[m
+[1mindex ccef1f7..c8044d4 100644[m
+[1m--- a/src/Http/ClienteHttp.java[m
+[1m+++ b/src/Http/ClientHttp.java[m
+[36m@@ -1,4 +1,4 @@[m
+[31m-package Conversor;[m
+[32m+[m[32mpackage Http;[m
+ [m
+ import com.google.gson.Gson;[m
+ [m
+[36m@@ -7,15 +7,13 @@[m [mimport java.net.URI;[m
+ import java.net.http.HttpClient;[m
+ import java.net.http.HttpRequest;[m
+ import java.net.http.HttpResponse;[m
+[31m-import java.util.List;[m
+ import java.util.Map;[m
+ [m
+[31m-public class ClienteHttp{[m
+[32m+[m[32mpublic class ClienteHttp {[m
+ [m
+[31m-    private static final String BASE_URL = "https://api.exchangerate-api.com/v4/latest/USD";[m
+[31m-[m
+[31m-    public RespostaCambio obterTaxasDeCambio(String moedaBase) throws IOException,  InterruptedException {[m
+[32m+[m[32m    private static final String BASE_URL = "https://api.exchangerate-api.com/v4/latest/";[m
+ [m
+[32m+[m[32m    public RespostaCambio obterTaxasDeCambio(String moedaBase, String[] moedasSelecionadas) throws IOException, InterruptedException {[m
+         HttpClient client = HttpClient.newHttpClient();[m
+ [m
+         String urlCompleta = BASE_URL + moedaBase;[m
+[36m@@ -26,16 +24,14 @@[m [mpublic class ClienteHttp{[m
+                 .GET()[m
+                 .build();[m
+ [m
+[31m-        HttpResponse<String> resposta = cliente.send(requisicao, HttpResponse.BodyHandlers.ofString());[m
+[32m+[m[32m        HttpResponse<String> resposta = client.send(requisicao, HttpResponse.BodyHandlers.ofString());[m
+ [m
+         Gson gson = new Gson();[m
+         RespostaCambio respostaCambio = gson.fromJson(resposta.body(), RespostaCambio.class);[m
+ [m
+         Map<String, Double> taxasFiltradas = respostaCambio.filtrarMoedas(respostaCambio.getRates(), moedasSelecionadas);[m
+[31m-[m
+         respostaCambio.setRates(taxasFiltradas);[m
+ [m
+         return respostaCambio;[m
+[31m-[m
+     }[m
+ }[m
+[1mdiff --git a/src/Log/LogConversoes.java b/src/Log/LogConversoes.java[m
+[1mdeleted file mode 100644[m
+[1mindex a948268..0000000[m
+[1m--- a/src/Log/LogConversoes.java[m
+[1m+++ /dev/null[m
+[36m@@ -1,23 +0,0 @@[m
+[31m-package Conversor;[m
+[31m-[m
+[31m-import java.util.ArrayList;[m
+[31m-import java.util.List;[m
+[31m-[m
+[31m-public class LogConversoes {[m
+[31m-    private List<String> logs = new ArrayList<>();[m
+[31m-[m
+[31m-    public void adicionarLog(String log) {[m
+[31m-        logs.add(log);[m
+[31m-    }[m
+[31m-[m
+[31m-    public void exibirLogs() {[m
+[31m-        if (logs.isEmpty()) {[m
+[31m-            System.out.println("Nenhum log registrado até o momento.");[m
+[31m-        } else {[m
+[31m-            System.out.println("=== Registros de Logs ===");[m
+[31m-            for (String log : logs) {[m
+[31m-                System.out.println(log);[m
+[31m-            }[m
+[31m-        }[m
+[31m-    }[m
+[31m-}[m
